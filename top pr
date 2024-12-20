@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class OnlineExaminationSystem {
+public class Main {
 
     public static class Question {
         private int questionId;
