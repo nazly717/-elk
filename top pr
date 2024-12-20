@@ -1,0 +1,160 @@
+import java.util.ArrayList;
+
+public class OnlineExaminationSystem {
+
+    public static class Question {
+        private int questionId;
+        private String questionText;
+        private String[] options;
+        private String correctAnswer;
+
+        public Question(int questionId, String questionText, String[] options, String correctAnswer) {
+            this.questionId = questionId;
+            this.questionText = questionText;
+            this.options = options;
+            this.correctAnswer = correctAnswer;
+        }
+
+        public int getQuestionId() {
+            return questionId;
+        }
+
+        public void setQuestionId(int questionId) {
+            this.questionId = questionId;
+        }
+
+        public String getQuestionText() {
+            return questionText;
+        }
+
+        public void setQuestionText(String questionText) {
+            this.questionText = questionText;
+        }
+
+        public String[] getOptions() {
+            return options;
+        }
+
+        public void setOptions(String[] options) {
+            this.options = options;
+        }
+
+        public String getCorrectAnswer() {
+            return correctAnswer;
+        }
+
+        public void setCorrectAnswer(String correctAnswer) {
+            this.correctAnswer = correctAnswer;
+        }
+
+        public void displayQuestion() {
+            System.out.println("Question " + questionId + ": " + questionText);
+            for (String option : options) {
+                System.out.println(option);
+            }
+        }
+    }
+
+    public static class Candidate {
+        private int candidateId;
+        private String name;
+        private ArrayList<String> answers;
+
+        public Candidate(int candidateId, String name) {
+            this.candidateId = candidateId;
+            this.name = name;
+            this.answers = new ArrayList<>();
+        }
+
+        public int getCandidateId() {
+            return candidateId;
+        }
+
+        public void setCandidateId(int candidateId) {
+            this.candidateId = candidateId;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public ArrayList<String> getAnswers() {
+            return answers;
+        }
+
+        public void setAnswers(ArrayList<String> answers) {
+            this.answers = answers;
+        }
+
+        public void addAnswer(String answer) {
+            answers.add(answer);
+        }
+
+        public void displayCandidateInfo() {
+            System.out.println("Candidate ID: " + candidateId);
+            System.out.println("Candidate Name: " + name);
+        }
+    }
+
+    public static class Exam {
+        private String examName;
+        private ArrayList<Question> questions;
+        private Candidate candidate;
+
+        public Exam(String examName) {
+            this.examName = examName;
+            this.questions = new ArrayList<>();
+        }
+
+        public void addQuestion(Question question) {
+            questions.add(question);
+        }
+
+        public void assignCandidate(Candidate candidate) {
+            this.candidate = candidate;
+        }
+
+        public void conductExam() {
+            if (candidate == null) {
+                System.out.println("No candidate assigned to the exam.");
+                return;
+            }
+
+            System.out.println("Conducting exam for: " + candidate.getName());
+            for (Question question : questions) {
+                question.displayQuestion();
+                candidate.addAnswer("A");
+            }
+        }
+
+        public void evaluateExam() {
+            int score = 0;
+            for (int i = 0; i < questions.size(); i++) {
+                if (candidate.getAnswers().get(i).equals(questions.get(i).getCorrectAnswer())) {
+                    score++;
+                }
+            }
+            System.out.println("Candidate " + candidate.getName() + " scored " + score + " out of " + questions.size());
+        }
+    }
+
+    public static void main(String[] args) {
+        Question q1 = new Question(1, "What is Java?", new String[]{"A. Programming Language", "B. Coffee", "C. Operating System", "D. Hardware"}, "A");
+        Question q2 = new Question(2, "What is the capital of France?", new String[]{"A. Berlin", "B. Madrid", "C. Paris", "D. Rome"}, "C");
+
+        Candidate candidate = new Candidate(1, "John Doe");
+
+        Exam exam = new Exam("Java Knowledge Test");
+        exam.addQuestion(q1);
+        exam.addQuestion(q2);
+
+        exam.assignCandidate(candidate);
+        exam.conductExam();
+
+        exam.evaluateExam();
+    }
+}
