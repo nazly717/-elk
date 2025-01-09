@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 
@@ -15,79 +16,31 @@ public class Main {
             this.correctAnswer = correctAnswer;
         }
 
-        public int getQuestionId() {
-            return questionId;
-        }
-
-        public void setQuestionId(int questionId) {
-            this.questionId = questionId;
-        }
-
-        public String getQuestionText() {
-            return questionText;
-        }
-
-        public void setQuestionText(String questionText) {
-            this.questionText = questionText;
-        }
-
-        public String[] getOptions() {
-            return options;
-        }
-
-        public void setOptions(String[] options) {
-            this.options = options;
-        }
-
-        public String getCorrectAnswer() {
-            return correctAnswer;
-        }
-
-        public void setCorrectAnswer(String correctAnswer) {
-            this.correctAnswer = correctAnswer;
-        }
-
         public void displayQuestion() {
             System.out.println("Question " + questionId + ": " + questionText);
             for (String option : options) {
                 System.out.println(option);
             }
         }
+
+        public String getCorrectAnswer() {
+            return correctAnswer;
+        }
     }
 
     public static class Candidate {
         private int candidateId;
         private String name;
+        private String lastName;
+        private String className;
         private ArrayList<String> answers;
 
-        public Candidate(int candidateId, String name) {
+        public Candidate(int candidateId, String name, String lastName, String className) {
             this.candidateId = candidateId;
             this.name = name;
+            this.lastName = lastName;
+            this.className = className;
             this.answers = new ArrayList<>();
-        }
-
-        public int getCandidateId() {
-            return candidateId;
-        }
-
-        public void setCandidateId(int candidateId) {
-            this.candidateId = candidateId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public ArrayList<String> getAnswers() {
-            return answers;
-        }
-
-        public void setAnswers(ArrayList<String> answers) {
-            this.answers = answers;
         }
 
         public void addAnswer(String answer) {
@@ -96,7 +49,12 @@ public class Main {
 
         public void displayCandidateInfo() {
             System.out.println("Candidate ID: " + candidateId);
-            System.out.println("Candidate Name: " + name);
+            System.out.println("Name: " + name + " " + lastName);
+            System.out.println("Class: " + className);
+        }
+
+        public ArrayList<String> getAnswers() {
+            return answers;
         }
     }
 
@@ -124,10 +82,13 @@ public class Main {
                 return;
             }
 
-            System.out.println("Conducting exam for: " + candidate.getName());
+            System.out.println("\nConducting exam for: " + candidate.name + " " + candidate.lastName);
+            Scanner scanner = new Scanner(System.in);
             for (Question question : questions) {
                 question.displayQuestion();
-                candidate.addAnswer("A");
+                System.out.print("Select your answer (A, B, C, D): ");
+                String answer = scanner.nextLine();
+                candidate.addAnswer(answer);
             }
         }
 
@@ -138,23 +99,58 @@ public class Main {
                     score++;
                 }
             }
-            System.out.println("Candidate " + candidate.getName() + " scored " + score + " out of " + questions.size());
+            System.out.println("\nExam Evaluation:");
+            candidate.displayCandidateInfo();
+            System.out.println("Score: " + score + " out of " + questions.size());
         }
     }
 
     public static void main(String[] args) {
-        Question q1 = new Question(1, "What is Java?", new String[]{"A. Programming Language", "B. Coffee", "C. Operating System", "D. Hardware"}, "A");
-        Question q2 = new Question(2, "What is the capital of France?", new String[]{"A. Berlin", "B. Madrid", "C. Paris", "D. Rome"}, "C");
+        Scanner scanner = new Scanner(System.in);
 
-        Candidate candidate = new Candidate(1, "John Doe");
+        // Запрос информации о кандидате
+        System.out.print("Enter your first name: ");
+        String firstName = scanner.nextLine();
 
-        Exam exam = new Exam("Java Knowledge Test");
+        System.out.print("Enter your last name: ");
+        String lastName = scanner.nextLine();
+
+        System.out.print("Enter your class (e.g., 1A, 2B): ");
+        String className = scanner.nextLine();
+
+        // Создание кандидата
+        Candidate candidate = new Candidate(1, firstName, lastName, className);
+
+        // Создание вопросов
+        Question q1 = new Question(1, "What is the capital of France?", new String[]{"A. Berlin", "B. Madrid", "C. Paris", "D. Rome"}, "C");
+        Question q2 = new Question(2, "What is 5 + 7?", new String[]{"A. 10", "B. 11", "C. 12", "D. 13"}, "C");
+        Question q3 = new Question(3, "Who wrote 'Romeo and Juliet'?", new String[]{"A. Charles Dickens", "B. William Shakespeare", "C. Mark Twain", "D. J.K. Rowling"}, "B");
+        Question q4 = new Question(4, "What is the largest planet in our solar system?", new String[]{"A. Earth", "B. Mars", "C. Jupiter", "D. Saturn"}, "C");
+        Question q5 = new Question(5, "What is the chemical symbol for water?", new String[]{"A. CO2", "B. H2O", "C. O2", "D. N2"}, "B");
+        Question q6 = new Question(6, "Which of the following is a prime number?", new String[]{"A. 4", "B. 9", "C. 7", "D. 8"}, "C");
+        Question q7 = new Question(7, "In which year did the Titanic sink?", new String[]{"A. 1910", "B. 1912", "C. 1914", "D. 1920"}, "B");
+        Question q8 = new Question(8, "Which of these is a programming language?", new String[]{"A. HTML", "B. CSS", "C. Java", "D. JPG"}, "C");
+        Question q9 = new Question(9, "What is the largest ocean on Earth?", new String[]{"A. Atlantic", "B. Pacific", "C. Indian", "D. Arctic"}, "B");
+        Question q10 = new Question(10, "Who was the first president of the United States?", new String[]{"A. Abraham Lincoln", "B. George Washington", "C. Thomas Jefferson", "D. John Adams"}, "B");
+
+        // Создание экзамена и добавление вопросов
+        Exam exam = new Exam("General Knowledge Test");
         exam.addQuestion(q1);
         exam.addQuestion(q2);
+        exam.addQuestion(q3);
+        exam.addQuestion(q4);
+        exam.addQuestion(q5);
+        exam.addQuestion(q6);
+        exam.addQuestion(q7);
+        exam.addQuestion(q8);
+        exam.addQuestion(q9);
+        exam.addQuestion(q10);
 
+        // Назначаем кандидата и проводим экзамен
         exam.assignCandidate(candidate);
         exam.conductExam();
 
+        // Оценка экзамена
         exam.evaluateExam();
     }
 }
